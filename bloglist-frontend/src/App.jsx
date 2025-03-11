@@ -67,8 +67,6 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -91,9 +89,26 @@ const App = () => {
             <Nav.Link href="#" as="span">
               <em>{user.username} logged in</em>
             </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '5px 10px',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Logout
+              </button>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      <h2>Blog App</h2>
+      <Notification />
 
       <Routes>
         <Route

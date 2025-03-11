@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Blog = ({ blog, updateBlog, displayRemove, deleteBlog }) => {
+const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,63 +9,12 @@ const Blog = ({ blog, updateBlog, displayRemove, deleteBlog }) => {
     marginBottom: 5,
   }
 
-  const [showDetails, setShowDetails] = useState(false)
-
-  const showWhenInDetailed = {
-    ...blogStyle,
-    display: showDetails ? '' : 'none',
-  }
-  const hideWhenInDetailed = {
-    ...blogStyle,
-    display: showDetails ? 'none' : '',
-  }
-
-  const toggleShowDetails = () => {
-    setShowDetails(!showDetails)
-  }
-
-  const likeBlog = () => {
-    updateBlog(blog.id)
-  }
-
-  const removeBlog = () => {
-    deleteBlog(blog.id)
-  }
-
-  if (showDetails === false) {
-    return (
-      <div style={hideWhenInDetailed} className="blog">
-        <div>
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
-          </Link>{' '}
-          <button onClick={toggleShowDetails}>view</button>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    // <div style={blogStyle}>
-    <div style={showWhenInDetailed} className="blog">
-      <div>
-        <Link to={`/blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>{' '}
-        <button onClick={toggleShowDetails}>hide</button>
-      </div>
-      <div>{blog.url}</div>
-      <div>
-        {blog.likes} <button onClick={likeBlog}>like</button>{' '}
-      </div>
-      <div>{blog.user && blog.user.name}</div>
-      {displayRemove && (
-        <div>
-          <button onClick={removeBlog}>remove</button>
-        </div>
-      )}
+    <div style={blogStyle} className="blog">
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title} {blog.author}
+      </Link>{' '}
     </div>
-    // </div>
   )
 }
 

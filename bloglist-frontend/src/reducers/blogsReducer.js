@@ -53,4 +53,15 @@ export const likeBlog = (id) => {
   }
 }
 
+export const commentBlog = (id, content) => {
+  return async (dispatch, getState) => {
+    const blogs = getState().blogs
+    const commentedBlog = await blogService.commentBlog(id, { content })
+    dispatch(
+      setBlogs(blogs.map((blog) => (blog.id === id ? commentedBlog : blog))),
+    )
+    return commentedBlog
+  }
+}
+
 export default blogSlice.reducer
