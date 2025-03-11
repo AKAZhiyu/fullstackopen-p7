@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog, updateBlog, displayRemove, deleteBlog }) => {
   const blogStyle = {
@@ -34,14 +35,14 @@ const Blog = ({ blog, updateBlog, displayRemove, deleteBlog }) => {
 
   if (showDetails === false) {
     return (
-      // <div style={blogStyle}>
       <div style={hideWhenInDetailed} className="blog">
         <div>
-          {blog.title} {blog.author}{' '}
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>{' '}
           <button onClick={toggleShowDetails}>view</button>
         </div>
       </div>
-      // </div>
     )
   }
 
@@ -49,7 +50,9 @@ const Blog = ({ blog, updateBlog, displayRemove, deleteBlog }) => {
     // <div style={blogStyle}>
     <div style={showWhenInDetailed} className="blog">
       <div>
-        {blog.title} {blog.author}{' '}
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} {blog.author}
+        </Link>{' '}
         <button onClick={toggleShowDetails}>hide</button>
       </div>
       <div>{blog.url}</div>

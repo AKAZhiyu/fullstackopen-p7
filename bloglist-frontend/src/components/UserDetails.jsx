@@ -1,4 +1,8 @@
-const UserDetails = ({ user }) => {
+import { useParams } from 'react-router-dom'
+
+const UserDetails = ({ users }) => {
+  const id = useParams().id
+  const user = users.find((u) => u.id === id)
   if (!user) {
     return null
   }
