@@ -1,0 +1,74 @@
+import Blog from './Blog'
+import { useSelector, useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
+import {
+  clearNotification,
+  setError as setErrorMessage,
+  setInfo as setInfoMessage,
+} from '../reducers/notificationReducer'
+
+const Blogs = () => {
+  const blogs = useSelector((state) => state.blogs)
+  const dispatch = useDispatch()
+  const handleUpdate = async (id) => {
+    try {
+      await dispatch(likeBlog(id))
+      dispatch(setInfoMessage('Blog liked'))
+      setTimeout(() => {
+        dispatch(clearNotification())
+      }, 5000)
+    } catch (exception) {
+      if (exception.response) {
+        dispatch(setErrorMessage(exception.response.data.error))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      } else {
+        dispatch(setErrorMessage('something went wrong'))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      }
+    }
+  }
+
+  const handleDeleteBlog = async (blog) => {
+    try {
+      const blog = blogs.find((b) => b.id === blog.id)
+      // blogService.deleteBlog(id)
+      if (window.confirm(`remove blog ${blog.title} by ${blog.user.name}`)) {
+        await dispatch(deleteBlog(blog.id))
+
+        dispatch(setInfoMessage('Blog deleted'))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      }
+    } catch (exception) {
+      if (exception.response) {
+        dispatch(setErrorMessage(exception.response.data.error))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      } else {
+        dispatch(setErrorMessage('something went wrong'))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      }
+    }
+  }
+
+  return blogs.map((blog) => (
+    <Blog
+      key={blog.id}
+      blog={blog}
+      updateBlog={handleUpdate}
+      // displayRemove={blog.user && blog.user.username === user.username}
+      displayRemove={false}
+      deleteBlog={handleDeleteBlog}
+    />
+  ))
+}
+
+export default Blogs
