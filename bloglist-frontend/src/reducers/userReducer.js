@@ -9,18 +9,12 @@ const userSlice = createSlice({
     setUser(state, action) {
       return action.payload
     },
-    logOut(state, action) {
+    clearUser(state, action) {
       return null
     },
   },
 })
 
-export const { setUser, logOut } = userSlice.actions
-
-export const loginUser = (username, password) => {
-  return async (dispatch) => {
-    const user = await loginService.login(username, password)
-  }
-}
+export const { setUser, clearUser } = userSlice.actions
 
 export default userSlice.reducer

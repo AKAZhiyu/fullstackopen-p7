@@ -1,21 +1,49 @@
-import { useState } from "react";
+import { useState } from 'react'
+import {
+  clearNotification,
+  setError as setErrorMessage,
+  setInfo as setInfoMessage,
+} from '../reducers/notificationReducer'
+import { createBlog } from '../reducers/blogsReducer'
+import { useDispatch } from 'react-redux'
 
-const BlogForm = ({ createBlog }) => {
-  const [newBlogTitle, setNewBlogTitle] = useState("");
-  const [newBlogUrl, setNewBlogUrl] = useState("");
-  const [newBlogAuthor, setNewBlogAuthor] = useState("");
+const BlogForm = () => {
+  const dispatch = useDispatch()
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
 
-  const addBlog = (event) => {
-    event.preventDefault();
-    createBlog({
-      author: newBlogAuthor,
-      url: newBlogUrl,
-      title: newBlogTitle,
-    });
-    setNewBlogAuthor("");
-    setNewBlogTitle("");
-    setNewBlogUrl("");
-  };
+  const addBlog = async (event) => {
+    event.preventDefault()
+    try {
+      const savedBlog = await dispatch(
+        createBlog({
+          author: newBlogAuthor,
+          url: newBlogUrl,
+          title: newBlogTitle,
+        }),
+      )
+      dispatch(setInfoMessage('Blog created'))
+      setTimeout(() => {
+        dispatch(clearNotification())
+      }, 5000)
+    } catch (exception) {
+      if (exception.response) {
+        dispatch(setErrorMessage(exception.response.data.error))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      } else {
+        dispatch(setErrorMessage('something went wrong'))
+        setTimeout(() => {
+          dispatch(clearNotification())
+        }, 5000)
+      }
+    }
+    setNewBlogAuthor('')
+    setNewBlogTitle('')
+    setNewBlogUrl('')
+  }
 
   return (
     <div className="blogForm">
@@ -58,7 +86,7 @@ const BlogForm = ({ createBlog }) => {
         <button type="submit">create</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default BlogForm;
+export default BlogForm

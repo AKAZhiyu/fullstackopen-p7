@@ -9,6 +9,7 @@ import {
 
 const Blogs = () => {
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const handleUpdate = async (id) => {
     try {
@@ -32,9 +33,9 @@ const Blogs = () => {
     }
   }
 
-  const handleDeleteBlog = async (blog) => {
+  const handleDeleteBlog = async (id) => {
     try {
-      const blog = blogs.find((b) => b.id === blog.id)
+      const blog = blogs.find((b) => b.id === id)
       // blogService.deleteBlog(id)
       if (window.confirm(`remove blog ${blog.title} by ${blog.user.name}`)) {
         await dispatch(deleteBlog(blog.id))
@@ -64,8 +65,7 @@ const Blogs = () => {
       key={blog.id}
       blog={blog}
       updateBlog={handleUpdate}
-      // displayRemove={blog.user && blog.user.username === user.username}
-      displayRemove={false}
+      displayRemove={blog.user && blog.user.username === user.username}
       deleteBlog={handleDeleteBlog}
     />
   ))
