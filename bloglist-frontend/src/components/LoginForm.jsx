@@ -8,6 +8,7 @@ import {
 } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
+import { Form, Button, Container, Card } from 'react-bootstrap'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -41,29 +42,42 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin} data-testid="login_form">
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          data-testid="username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          data-testid="password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <Container className="mt-5">
+      <Card style={{ maxWidth: '400px', margin: '0 auto' }}>
+        <Card.Body>
+          <Card.Title className="text-center mb-4">Login</Card.Title>
+          <Form onSubmit={handleLogin} data-testid="login_form">
+            <Form.Group className="mb-3" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                value={username}
+                name="Username"
+                data-testid="username"
+                placeholder="Enter username"
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                name="Password"
+                data-testid="password"
+                placeholder="Enter password"
+                onChange={({ target }) => setPassword(target.value)}
+              />
+            </Form.Group>
+
+            <Button variant="primary" type="submit" className="w-100">
+              Login
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Container>
   )
 }
 

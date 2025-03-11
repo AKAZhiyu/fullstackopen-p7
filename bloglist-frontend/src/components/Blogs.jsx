@@ -1,66 +1,21 @@
 import Blog from './Blog'
-import { useSelector, useDispatch } from 'react-redux'
-import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
-import {
-  clearNotification,
-  setError as setErrorMessage,
-  setInfo as setInfoMessage,
-} from '../reducers/notificationReducer'
+import { useSelector } from 'react-redux'
+import { Container, Row, Col } from 'react-bootstrap'
 
 const Blogs = () => {
   const blogs = useSelector((state) => state.blogs)
-  const user = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-  const handleUpdate = async (id) => {
-    try {
-      await dispatch(likeBlog(id))
-      dispatch(setInfoMessage('Blog liked'))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 5000)
-    } catch (exception) {
-      if (exception.response) {
-        dispatch(setErrorMessage(exception.response.data.error))
-        setTimeout(() => {
-          dispatch(clearNotification())
-        }, 5000)
-      } else {
-        dispatch(setErrorMessage('something went wrong'))
-        setTimeout(() => {
-          dispatch(clearNotification())
-        }, 5000)
-      }
-    }
-  }
 
-  const handleDeleteBlog = async (id) => {
-    try {
-      const blog = blogs.find((b) => b.id === id)
-      // blogService.deleteBlog(id)
-      if (window.confirm(`remove blog ${blog.title} by ${blog.user.name}`)) {
-        await dispatch(deleteBlog(blog.id))
-
-        dispatch(setInfoMessage('Blog deleted'))
-        setTimeout(() => {
-          dispatch(clearNotification())
-        }, 5000)
-      }
-    } catch (exception) {
-      if (exception.response) {
-        dispatch(setErrorMessage(exception.response.data.error))
-        setTimeout(() => {
-          dispatch(clearNotification())
-        }, 5000)
-      } else {
-        dispatch(setErrorMessage('something went wrong'))
-        setTimeout(() => {
-          dispatch(clearNotification())
-        }, 5000)
-      }
-    }
-  }
-
-  return blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
+  return (
+    <Container className="mt-4">
+      <Row xs={1} md={2} lg={3} className="g-4">
+        {blogs.map((blog) => (
+          <Col key={blog.id}>
+            <Blog blog={blog} />
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  )
 }
 
 export default Blogs

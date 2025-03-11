@@ -7,24 +7,22 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import UserDetails from './components/UserDetails'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  clearNotification,
-  setError as setErrorMessage,
-  setInfo as setInfoMessage,
-} from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { setUser, clearUser } from './reducers/userReducer'
 import UserList from './components/UserList'
 import { initializeUserList } from './reducers/userListReducer'
-import { Routes, Route, Link, useMatch } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import BlogDetails from './components/BlogDetails'
-import { Navbar, Nav } from 'react-bootstrap'
+import NaviBar from './components/NaviBar'
+import { useNavigate } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap'
 
 const App = () => {
   const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.userList)
   const blogs = useSelector((state) => state.blogs)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const blogFormRef = useRef()
 
@@ -42,120 +40,85 @@ const App = () => {
     }
   }, [])
 
-  const handleLogout = () => {
-    dispatch(clearUser())
-    dispatch(setInfoMessage('Logged out'))
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, 5000)
-    window.localStorage.removeItem('loggedNoteappUser')
-  }
-
-  const padding = {
-    padding: 5,
-  }
-
   if (user === null) {
     return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification />
-        <LoginForm />
-      </div>
+      <Container className="mt-5">
+        <Row className="justify-content-center">
+          <Col md={6} lg={4}>
+            <h2 className="text-center mb-4">Log in to Blog App</h2>
+            <Notification />
+            <LoginForm />
+          </Col>
+        </Row>
+      </Container>
     )
   }
 
   return (
     <div>
-      <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="#" as="span">
-              <Link style={padding} to="/">
-                home
-              </Link>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              <Link style={padding} to="/users">
-                users
-              </Link>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              <Link style={padding} to="/blogs">
-                blogs
-              </Link>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              <em>{user.username} logged in</em>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              <button
-                onClick={handleLogout}
-                style={{
-                  padding: '5px 10px',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                }}
-              >
-                Logout
-              </button>
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <h2>Blog App</h2>
-      <Notification />
-
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <UserList />
-              <Togglable buttonLabel={'Create a blog'} ref={blogFormRef}>
-                <BlogForm />
-              </Togglable>
-              <Blogs />
-            </div>
-          }
-        />
-        <Route
-          path="/users"
-          element={
-            <div>
-              <UserList />
-            </div>
-          }
-        />
-        <Route
-          path="/users/:id"
-          element={
-            <div>
-              <UserDetails users={users} />
-            </div>
-          }
-        />
-        <Route
-          path="/blogs"
-          element={
-            <div>
-              <Blogs />
-            </div>
-          }
-        />
-        <Route
-          path="/blogs/:id"
-          element={
-            <div>
-              <BlogDetails blogs={blogs} />
-            </div>
-          }
-        />
-      </Routes>
+      <NaviBar />
+      <Container className="mt-4">
+        <Notification />
+        <h2 className="mb-4">Blog App</h2>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Row>
+                <Col md={4}>
+                  <UserList />
+                  <Togglable buttonLabel={'Create a blog'} ref={blogFormRef}>
+                    <BlogForm blogFormRef={blogFormRef} />
+                  </Togglable>
+                </Col>
+                <Col md={8}>
+                  <Blogs />
+                </Col>
+              </Row>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <Row>
+                <Col>
+                  <UserList />
+                </Col>
+              </Row>
+            }
+          />
+          <Route
+            path="/users/:id"
+            element={
+              <Row>
+                <Col>
+                  <UserDetails users={users} />
+                </Col>
+              </Row>
+            }
+          />
+          <Route
+            path="/blogs"
+            element={
+              <Row>
+                <Col>
+                  <Blogs />
+                </Col>
+              </Row>
+            }
+          />
+          <Route
+            path="/blogs/:id"
+            element={
+              <Row>
+                <Col>
+                  <BlogDetails blogs={blogs} />
+                </Col>
+              </Row>
+            }
+          />
+        </Routes>
+      </Container>
     </div>
   )
 }

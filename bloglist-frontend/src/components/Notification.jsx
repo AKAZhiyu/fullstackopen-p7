@@ -1,12 +1,21 @@
 import { useSelector } from 'react-redux'
+import { Alert, Container } from 'react-bootstrap'
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
+
   if (notification === null) {
     return null
   }
 
-  return <div className={notification.type}>{notification.message}</div>
-}
+  const variant = notification.type === 'error' ? 'danger' : 'success'
 
+  return (
+    <Container className="mt-3">
+      <Alert variant={variant} className="shadow-sm">
+        {notification.message}
+      </Alert>
+    </Container>
+  )
+}
 export default Notification
