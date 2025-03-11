@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
@@ -13,6 +13,9 @@ import {
 } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { setUser, clearUser } from './reducers/userReducer'
+import UserList from './components/UserList'
+import { initializeUserList } from './reducers/userListReducer'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 
 const App = () => {
   const user = useSelector((state) => state.user)
@@ -22,6 +25,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUserList())
   }, [dispatch])
 
   useEffect(() => {
@@ -60,6 +64,7 @@ const App = () => {
         {user.username} logged in{' '}
         <button onClick={handleLogout}>log out</button>
       </p>
+      <UserList />
       <Togglable buttonLabel={'Create a blog'} ref={blogFormRef}>
         <BlogForm />
       </Togglable>
